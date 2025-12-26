@@ -3,6 +3,7 @@
 Check my [Web](https://jingwu2121.github.io/)!!
 
 Research:
+Reflect3r: https://arxiv.org/abs/2509.20607
 GaussCtrl: https://github.com/ActiveVisionLab/gaussctrl
 
 Projects:
