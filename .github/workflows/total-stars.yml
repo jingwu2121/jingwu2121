@@ -11,6 +11,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0   # ⭐ CRITICAL FIX
 
       - name: Calculate stars
         env:
@@ -18,13 +20,11 @@ jobs:
         run: |
           USER="jingwu2121"
           LAB_REPO="ActiveVisionLab/gaussctrl"
-          
+
           user_stars=$(gh api users/$USER/repos --paginate --jq '[.[].stargazers_count] | add')
-          
           lab_stars=$(gh api repos/$LAB_REPO --jq '.stargazers_count')
-          
+
           total=$((user_stars + lab_stars))
-          
           echo "TOTAL_STARS=$total" >> $GITHUB_ENV
 
       - name: Update README badge
@@ -33,12 +33,15 @@ jobs:
 
       - name: Commit changes
         run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
-      
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+
+          # ⭐ pull BEFORE commit (key)
+          git pull origin main --rebase
+
           git add README.md
-      
-          git diff --quiet && git diff --staged --quiet || git commit -m "update total stars"
-      
-          git pull --rebase origin main
-          git push
+
+          if ! git diff --staged --quiet; then
+            git commit -m "update total stars"
+            git push origin main
+          fi
