@@ -17,13 +17,14 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           USER="jingwu2121"
-          ORG="ActiveVisionLab"
-
+          LAB_REPO="ActiveVisionLab/gaussctrl"
+          
           user_stars=$(gh api users/$USER/repos --paginate --jq '[.[].stargazers_count] | add')
-          org_stars=$(gh api orgs/$ORG/repos --paginate --jq '[.[].stargazers_count] | add')
-
-          total=$((user_stars + org_stars))
-
+          
+          lab_stars=$(gh api repos/$LAB_REPO --jq '.stargazers_count')
+          
+          total=$((user_stars + lab_stars))
+          
           echo "TOTAL_STARS=$total" >> $GITHUB_ENV
 
       - name: Update README badge
