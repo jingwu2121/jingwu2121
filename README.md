@@ -10,4 +10,4 @@ Research:
 Projects:
 An Astro theme for academic users: [[Code](https://github.com/jingwu2121/astro-micro-academic)] [[Demo](https://astro-micro-academic.vercel.app/)]
 
-![Total Stars](https://img.shields.io/badge/Total%20Stars-Updating...-blue?style=for-the-badge)
+
