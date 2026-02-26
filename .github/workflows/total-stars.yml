@@ -1,0 +1,38 @@
+name: Update total stars
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  update-stars:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Calculate stars
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          USER="jingwu2121"
+          ORG="ActiveVisionLab"
+
+          user_stars=$(gh api users/$USER/repos --paginate --jq '[.[].stargazers_count] | add')
+          org_stars=$(gh api orgs/$ORG/repos --paginate --jq '[.[].stargazers_count] | add')
+
+          total=$((user_stars + org_stars))
+
+          echo "TOTAL_STARS=$total" >> $GITHUB_ENV
+
+      - name: Update README badge
+        run: |
+          sed -i "s/Total%20Stars-[0-9]*/Total%20Stars-${TOTAL_STARS}/" README.md
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git commit -am "update total stars"
+          git push
