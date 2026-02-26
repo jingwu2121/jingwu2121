@@ -35,13 +35,18 @@ jobs:
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "actions@github.com"
-
-          # ⭐ pull BEFORE commit (key)
-          git pull origin main --rebase
-
+      
           git add README.md
-
+      
           if ! git diff --staged --quiet; then
             git commit -m "update total stars"
-            git push origin main
+      
+            # fetch latest safely
+            git fetch origin main
+      
+            # reset to remote (prevents race conflicts)
+            git rebase origin/main || git rebase --abort
+      
+            # safest push for automation
+            git push origin HEAD:main --force-with-lease
           fi
