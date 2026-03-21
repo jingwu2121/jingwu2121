@@ -1,7 +1,5 @@
 # 👋 
 
-Check my [Web](https://jingwu2121.github.io/)!!
-
 Research:
 - OS-Marathon: https://os-marathon.github.io/
 - Reflect3r: https://github.com/jingwu2121/reflect3r
